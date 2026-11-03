@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fff0f5" />
+  <meta name="description" content="A little love note, made especially for Luizy." />
+  <title>A Little Something for Luizy ♡</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="floating-hearts" id="floatingHearts" aria-hidden="true"></div>
+
+  <main class="page">
+    <!-- The envelope the recipient sees first -->
+    <section class="scene welcome" id="welcomeScene" aria-labelledby="welcomeTitle">
+      <p class="eyebrow">a little something for <span data-recipient>Luizy</span> ♡</p>
+      <h1 id="welcomeTitle">You've got <em>love mail!</em></h1>
+      <p class="intro">I made you a tiny surprise. Open it when you're ready.</p>
+
+      <button class="envelope-button" id="openButton" type="button" aria-label="Open your envelope">
+        <span class="envelope" aria-hidden="true">
+          <span class="envelope-back"></span>
+          <span class="envelope-paper">to <span data-recipient>Luizy</span> ♡</span>
+          <span class="envelope-front"></span>
+          <span class="envelope-flap"></span>
+          <span class="envelope-seal">♥</span>
+        </span>
+      </button>
+      <p class="tap-hint">↑ tap the envelope to open ↑</p>
+    </section>
+
+    <!-- The letter and proposal (hidden until the envelope opens) -->
+    <section class="scene letter-scene" id="letterScene" aria-labelledby="letterTitle" hidden>
+      <article class="letter-card">
+        <p class="letter-label">✿ a little note from my heart ✿</p>
+        <h2 id="letterTitle">my beautiful <span data-recipient>Luizy</span>,</h2>
+
+        <div class="letter-copy">
+          <p id="letterLine1"></p>
+          <p id="letterLine2"></p>
+          <p id="letterLine3"></p>
+        </div>
+        <p class="signoff">With lots of teasing,<br /><strong data-sender>Andrew</strong></p>
+
+        <div class="heart-divider" aria-hidden="true"><span>♥</span></div>
+
+        <h3 class="gallery-heading">Our memories so far and more to come</h3>
+        <div class="photo-gallery" aria-label="Photo memories">
+          <figure class="polaroid">
+            <div class="photo-frame photo-one">
+              <span class="photo-placeholder" aria-hidden="true">✿<small>photo 1</small></span>
+              <img src="photos/photo-1.jpg" alt="Our first photo memory" />
+            </div>
+            <figcaption id="photoCaption1"></figcaption>
+          </figure>
+          <figure class="polaroid">
+            <div class="photo-frame photo-two">
+              <span class="photo-placeholder" aria-hidden="true">♡<small>photo 2</small></span>
+              <img src="photos/photo-2.jpg" alt="Another special moment together" />
+            </div>
+            <figcaption id="photoCaption2"></figcaption>
+          </figure>
+          <figure class="polaroid">
+            <div class="photo-frame photo-three">
+              <span class="photo-placeholder" aria-hidden="true">✦<small>photo 3</small></span>
+              <img src="photos/photo-3.jpg" alt="A happy memory" />
+            </div>
+            <figcaption id="photoCaption3"></figcaption>
+          </figure>
+        </div>
+
+        <section class="question-card" id="questionCard" aria-labelledby="questionTitle">
+          <p class="eyebrow">okay, one little question...</p>
+          <h3 id="questionTitle"></h3>
+          <p class="question-hint">You can't click no anyway so you might as well say yes</p>
+          <div class="answer-buttons">
+            <button class="button button-yes" id="yesButton" type="button">Yes! 💗</button>
+            <button class="button button-no" id="noButton" type="button">No, thank you</button>
+          </div>
+        </section>
+
+        <section class="response-card" id="responseCard" role="status" aria-live="polite" hidden>
+          <div class="response-icon" id="responseIcon" aria-hidden="true"></div>
+          <h3 id="responseTitle" tabindex="-1"></h3>
+          <p id="responseText"></p>
+          <button class="button button-soft" id="backButton" type="button">Back to my letter</button>
+        </section>
+      </article>
+
+      <div class="bottom-controls">
+        <button class="control-button" id="closeButton" type="button">↶ Close card</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>handmade with love, just for <span data-recipient>Luizy</span> ♡</footer>
+</body>
+</html>
