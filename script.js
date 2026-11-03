@@ -80,8 +80,8 @@ function showResponse(isYes) {
   if (isYes && !reducedMotion) burstHearts();
 }
 
-// A playful No button that dodges a nearby mouse cursor.
-// After five moves it vanishes; touchscreens and keyboard input still work.
+// A playful No button: dodges nearby mouse cursors and jumps when tapped.
+// After five moves it vanishes; keyboard users can still choose No.
 const noButton = byId("noButton");
 const yesButton = byId("yesButton");
 const answerArea = document.querySelector(".answer-buttons");
@@ -90,6 +90,7 @@ let lastDodge = 0;
 let offsetX = 0;
 let offsetY = 0;
 let vanishTimer = null;
+let lastTouchAt = -Infinity;
 
 function resetDodging() {
   if (vanishTimer !== null) window.clearTimeout(vanishTimer);
@@ -98,21 +99,23 @@ function resetDodging() {
   lastDodge = 0;
   offsetX = 0;
   offsetY = 0;
+  lastTouchAt = -Infinity;
   noButton.hidden = false;
   noButton.classList.remove("is-vanishing");
   noButton.style.transform = "";
+  answerArea.classList.remove("no-gone");
 }
 
-function dodgeMouse(event) {
-  if (event.pointerType !== "mouse" || reducedMotion || dodges >= 5) return;
-  if (performance.now() - lastDodge < 320) return;
+function dodgeNoButton(event, isTouch = false) {
+  if (dodges >= 5 || (!isTouch && (event.pointerType !== "mouse" || reducedMotion))) return;
+  if (!isTouch && performance.now() - lastDodge < 320) return;
 
   const buttonRect = noButton.getBoundingClientRect();
   const closeToButton = event.clientX > buttonRect.left - 75 &&
     event.clientX < buttonRect.right + 75 &&
     event.clientY > buttonRect.top - 75 &&
     event.clientY < buttonRect.bottom + 75;
-  if (!closeToButton) return;
+  if (!isTouch && !closeToButton) return;
 
   const areaRect = answerArea.getBoundingClientRect();
   const yesRect = yesButton.getBoundingClientRect();
@@ -123,66 +126,3 @@ function dodgeMouse(event) {
 
   let best = { x: startX, y: startY, score: -Infinity };
   for (let i = 0; i < 35; i++) {
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-    const left = areaRect.left + x;
-    const top = areaRect.top + y;
-    const overlapsYes = left < yesRect.right + 12 && left + buttonRect.width > yesRect.left - 12 &&
-      top < yesRect.bottom + 12 && top + buttonRect.height > yesRect.top - 12;
-    const distance = Math.hypot(left + buttonRect.width / 2 - event.clientX,
-                                top + buttonRect.height / 2 - event.clientY);
-    const score = distance - (overlapsYes ? 2000 : 0) + Math.random() * 25;
-    if (score > best.score) best = { x, y, score };
-  }
-
-  offsetX = best.x - startX;
-  offsetY = best.y - startY;
-  noButton.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-  lastDodge = performance.now();
-  dodges++;
-  if (dodges === 5) {
-    noButton.classList.add("is-vanishing");
-    vanishTimer = window.setTimeout(() => {
-      noButton.hidden = true;
-      vanishTimer = null;
-    }, reducedMotion ? 25 : 350);
-  }
-}
-
-question.addEventListener("pointermove", dodgeMouse);
-
-yesButton.addEventListener("click", () => showResponse(true));
-noButton.addEventListener("click", () => showResponse(false));
-byId("backButton").addEventListener("click", () => {
-  resetDodging();
-  response.hidden = true;
-  question.hidden = false;
-  byId("questionTitle").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
-  byId("yesButton").focus({ preventScroll: true });
-});
-byId("closeButton").addEventListener("click", () => {
-  resetDodging();
-  letter.hidden = true;
-  letter.classList.remove("is-visible");
-  response.hidden = true;
-  question.hidden = false;
-  welcome.hidden = false;
-  welcome.classList.remove("is-opening");
-  byId("openButton").focus({ preventScroll: true });
-  window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
-});
-
-function burstHearts() {
-  for (let i = 0; i < 32; i++) {
-    const heart = document.createElement("span");
-    heart.className = "burst-heart";
-    heart.textContent = ["♥", "♡", "💗", "✦"][i % 4];
-    heart.style.left = "50%";
-    heart.style.top = "55%";
-    heart.style.setProperty("--size", `${16 + Math.random() * 21}px`);
-    heart.style.setProperty("--x", `${(Math.random() - .5) * 650}px`);
-    heart.style.setProperty("--y", `${(Math.random() - .5) * 550}px`);
-    document.body.appendChild(heart);
-    window.setTimeout(() => heart.remove(), 1700);
-  }
-}
