@@ -1,0 +1,11 @@
+Add three JPG files to this folder:
+
+photo-1.jpg
+photo-2.jpg
+photo-3.jpg
+
+Those exact filenames are used in index.html.
+You may use PNG instead, but then change the .jpg extensions
+in the three <img src="..."> lines of index.html to .png.
+
+The card shows cute placeholders until photos have been added.
